@@ -83,7 +83,7 @@ def home(driver): driver.find_element(By.XPATH, "//a[@title='Pantalla Única de 
 
 
 # Función de apertura para generar validaciones
-def inicio(driver, cuenta, solucionVal, comentarioVal):
+def inicio(driver, cuenta, datos, proceso):
 
     try:
 
@@ -141,7 +141,7 @@ def inicio(driver, cuenta, solucionVal, comentarioVal):
             return False, resultado, '-'
         
         categoria = driver.find_element(By.XPATH, "//input[@aria-label='Categoria']")
-        categoria.send_keys('COBRANZA')
+        categoria.send_keys(datos['categoria'])
         categoria.send_keys(Keys.RETURN)
 
         # Buscando Motivo
@@ -151,7 +151,7 @@ def inicio(driver, cuenta, solucionVal, comentarioVal):
             return False, resultado, '-'
         
         motivo = driver.find_element(By.XPATH, "//input[@aria-label='Motivo']")
-        motivo.send_keys('GESTORIA DE COBRANZA')
+        motivo.send_keys(datos['motivo'])
         motivo.send_keys(Keys.RETURN)
 
         # Buscando Sub Motivo
@@ -161,7 +161,7 @@ def inicio(driver, cuenta, solucionVal, comentarioVal):
             return False, resultado, '-'
         
         subMotivo = driver.find_element(By.XPATH, "//input[@aria-label='Submotivo']")
-        subMotivo.send_keys('COBRANZA EXTERNA')
+        subMotivo.send_keys(datos['subMotivo'])
         subMotivo.send_keys(Keys.RETURN)
 
         # Buscando Solucion
@@ -171,7 +171,7 @@ def inicio(driver, cuenta, solucionVal, comentarioVal):
             return False, resultado, '-'
         
         solucion = driver.find_element(By.XPATH, "//input[@aria-label='Solución']")
-        solucion.send_keys(solucionVal)
+        solucion.send_keys(datos['solucion'])
         solucion.send_keys(Keys.RETURN)
 
         # PAGO CON PROMOCION
@@ -184,7 +184,18 @@ def inicio(driver, cuenta, solucionVal, comentarioVal):
             return False, resultado, '-'
         
         comentarios = driver.find_element(By.XPATH, "//textarea[@aria-label='Comentarios']")
-        comentarios.send_keys(comentarioVal)
+        comentarios.send_keys(datos['comentario'])
+
+        # Buscando Motivo Cliente solo si aplica
+        if 'CN AGENCIAS EXTERNAS' in proceso or 'CN HEAVY USER' in proceso:
+            elementoActivo, resultado = cargandoElemento(driver, 'input', 'aria-label', 'Motivo Cliente')
+            if elementoActivo == False: 
+                if resultado == 'elemento no carga': resultado = 'Registro Pendiente'
+                return False, resultado, '-'
+            
+            motivoCliente = driver.find_element(By.XPATH, "//input[@aria-label='Motivo Cliente']")
+            motivoCliente.send_keys(datos['motivoCliente'])
+            motivoCliente.send_keys(Keys.RETURN)
 
         # Buscando Motivo Cierre
         elementoActivo, resultado = cargandoElemento(driver, 'input', 'aria-label', 'Motivo del Cierre')

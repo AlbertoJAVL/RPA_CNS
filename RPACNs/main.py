@@ -52,12 +52,169 @@ def main():
 
         if info != 'SIN INFO':
 
-            solucionPre = " ".join(info['solucion'].upper().split())
 
-            if 'PROMESA DE PAGO' in solucionPre: solucion = 'PAGO COMPLETO'
-            elif 'PROMESA CON PROMOCION'  in solucionPre: solucion = 'PAGO CON PROMOCION'
-            else: 
-                status = 'No aplica: Solucion Invalida'
+            if 'CN NORMAL' in info['proceso']:
+
+                solucionPre = " ".join(info['solucion'].upper().split())
+
+                if 'PROMESA DE PAGO' in solucionPre: solucion = 'PAGO COMPLETO'
+                elif 'PROMESA CON PROMOCION'  in solucionPre: solucion = 'PAGO CON PROMOCION'
+                else: 
+                    status = 'No aplica: Solucion Invalida'
+                    response = api.ajusteCerrado(
+                        info['id'],
+                        '-',
+                        info['fechaCaptura'],
+                        info['fechaCompletado'],
+                        status,
+                        info['cve_usuario'],
+                        ip,
+                        info['proceso'],
+                        info['cuenta'],
+                        info['fechaSubida'],
+                        info['categoria'],
+                        info['mootivo'],
+                        info['subMotivo'],
+                        info['solucion'],
+                        info['saldoIncobrable'],
+                        info['promocion'],
+                        info['ajuste'],
+                        info['fechaGestion'],
+                        info['tipo'],
+                        info['motivoDelCliente'],
+                        info['comentarios'],
+                        info['cnConMotivoHeavyUser'])
+                    print(response)
+                    return False
+                
+                if solucion == 'PAGO COMPLETO': comentario = f"SALDO INCOBRABLE: {info['saldoIncobrable']}\nFECHA: {info['fechaGestion']}\n{info['tipo']}\nCLIENTE CUENTA CON PROMOCION: ({info['promocion']})"
+                else: comentario = f"SALDO INCOBRABLE: {info['saldoIncobrable']}\nPROMOCION: {info['promocion']}\nAJUSTE: {info['ajuste']}\nFECHA: {info['fechaGestion']}\n{info['tipo']}"
+
+                plantilla = {
+                    'categoria' : 'COBRANZA',
+                    'motivo' : 'GESTORIA DE COBRANZA',
+                    'subMotivo' : 'COBRANZA EXTERNA',
+                    'solucion' : solucion,
+                    'comentario' : comentario,
+                    'motivoCliente' : ''
+                }
+
+            elif 'CN HEAVY USER' in info['proceso']: 
+
+                if info['cnConMotivoHeavyUser'] == None or info['cnConMotivoHeavyUser'] == '' or info['cnConMotivoHeavyUser'] == ' ':
+                    status = 'No aplica: Sin CN Motivo Heavy User'
+                    response = api.ajusteCerrado(
+                        info['id'],
+                        '-',
+                        info['fechaCaptura'],
+                        info['fechaCompletado'],
+                        status,
+                        info['cve_usuario'],
+                        ip,
+                        info['proceso'],
+                        info['cuenta'],
+                        info['fechaSubida'],
+                        info['categoria'],
+                        info['mootivo'],
+                        info['subMotivo'],
+                        info['solucion'],
+                        info['saldoIncobrable'],
+                        info['promocion'],
+                        info['ajuste'],
+                        info['fechaGestion'],
+                        info['tipo'],
+                        info['motivoDelCliente'],
+                        info['comentarios'],
+                        info['cnConMotivoHeavyUser'])
+                    print(response)
+                    return False
+
+                plantilla = {
+                    'categoria' : 'SOLICITUD DE CANCELACION',
+                    'motivo' : 'ECONOMICO',
+                    'subMotivo' : 'NO PUEDE SEGUIR PAGANDO NR',
+                    'solucion' : 'NO RETENIDO',
+                    'comentario' : f'DX POR HEAVY USER\nVIOLACION PUA INTERNET\nCN {info['cnConMotivoHeavyUser']}',
+                    'motivoCliente' : 'FOLIO DE CANCELACION'
+                }
+
+            elif 'CN AGENCIAS EXTERNAS' in info['proceso']: 
+
+                if 'COBRANZA EXTERNA' not in info['subMotivo'] and 'RECONEXION' not in info['subMotivo']:
+                    status = 'No aplica: Sub Motivo Invalido'
+                    response = api.ajusteCerrado(
+                        info['id'],
+                        '-',
+                        info['fechaCaptura'],
+                        info['fechaCompletado'],
+                        status,
+                        info['cve_usuario'],
+                        ip,
+                        info['proceso'],
+                        info['cuenta'],
+                        info['fechaSubida'],
+                        info['categoria'],
+                        info['mootivo'],
+                        info['subMotivo'],
+                        info['solucion'],
+                        info['saldoIncobrable'],
+                        info['promocion'],
+                        info['ajuste'],
+                        info['fechaGestion'],
+                        info['tipo'],
+                        info['motivoDelCliente'],
+                        info['comentarios'],
+                        info['cnConMotivoHeavyUser'])
+                    print(response)
+                    return False
+
+                listadoMotivosCliente = ['IZZI 80 RET', 'IZZI 100 RET', 'IZZI 150 RET', 'IZZI 80 + IZZITV HD RET', 'IZZI 100 + IZZITV HD RET', 'IZZI 150 + IZZITV HD RET']
+                
+                motivoClienteOK = False
+                for mC in listadoMotivosCliente:
+                    if mC in info['motivoDelCliente']:
+                        motivoClienteOK = True
+                        break
+
+                if motivoClienteOK == False: 
+                    status = 'No aplica: Motivo Cliente NO Valido'
+                    response = api.ajusteCerrado(
+                        info['id'],
+                        '-',
+                        info['fechaCaptura'],
+                        info['fechaCompletado'],
+                        status,
+                        info['cve_usuario'],
+                        ip,
+                        info['proceso'],
+                        info['cuenta'],
+                        info['fechaSubida'],
+                        info['categoria'],
+                        info['mootivo'],
+                        info['subMotivo'],
+                        info['solucion'],
+                        info['saldoIncobrable'],
+                        info['promocion'],
+                        info['ajuste'],
+                        info['fechaGestion'],
+                        info['tipo'],
+                        info['motivoDelCliente'],
+                        info['comentarios'],
+                        info['cnConMotivoHeavyUser'])
+                    print(response)
+                    return False
+
+                plantilla = {
+                    'categoria' : 'COBRANZA',
+                    'motivo' : 'GESTORIA DE COBRANZA',
+                    'subMotivo' : info['subMotivo'],
+                    'solucion' : 'RX MIGRACION DE PAQUETE',
+                    'comentario' : f"{info['promocion']}\n{info['ajuste']}\n{info['fechaGestion']}\n{info['tipo']}",
+                    'motivoCliente' : info['motivoDelCliente']
+                }
+
+            else:
+                status = 'No aplica: Tipo CN NO Detectado'
                 response = api.ajusteCerrado(
                     info['id'],
                     '-',
@@ -66,6 +223,7 @@ def main():
                     status,
                     info['cve_usuario'],
                     ip,
+                    info['proceso'],
                     info['cuenta'],
                     info['fechaSubida'],
                     info['categoria'],
@@ -76,19 +234,20 @@ def main():
                     info['promocion'],
                     info['ajuste'],
                     info['fechaGestion'],
-                    info['tipo'])
+                    info['tipo'],
+                    info['motivoDelCliente'],
+                    info['comentarios'],
+                    info['cnConMotivoHeavyUser'])
                 print(response)
                 return False
-                
 
-            if solucion == 'PAGO COMPLETO': comentario = f"SALDO INCOBRABLE: {info['saldoIncobrable']}\nFECHA: {info['fechaGestion']}\n{info['tipo']}\nCLIENTE CUENTA CON PROMOCION: ({info['promocion']})"
-            else: comentario = f"SALDO INCOBRABLE: {info['saldoIncobrable']}\nPROMOCION: {info['promocion']}\nAJUSTE: {info['ajuste']}\nFECHA: {info['fechaGestion']}\n{info['tipo']}"
+            
 
             comentario = comentario.replace('/', ' ').replace('%', ' ').replace('.', ' ').replace('$', ' ').replace('_', ' ').replace('-', ' ').replace(',', ' ')
 
 
 
-            resultado, valEstado, numeroCN = inicio(driver, info['cuenta'], solucion, comentario)
+            resultado, valEstado, numeroCN = inicio(driver, info['cuenta'], plantilla, info['proceso'])
             print(f'→ Resultado: {str(resultado)}')
             print(f'→ Estado Generado: {valEstado}')
             print(f'→ Numero CN Generado: {numeroCN}')
@@ -102,6 +261,7 @@ def main():
                     status,
                     info['cve_usuario'],
                     ip,
+                    info['proceso'],
                     info['cuenta'],
                     info['fechaSubida'],
                     info['categoria'],
@@ -112,7 +272,10 @@ def main():
                     info['promocion'],
                     info['ajuste'],
                     info['fechaGestion'],
-                    info['tipo'])
+                    info['tipo'],
+                    info['motivoDelCliente'],
+                    info['comentarios'],
+                    info['cnConMotivoHeavyUser'])
             print(response)
             if resultado == False: return False
                 

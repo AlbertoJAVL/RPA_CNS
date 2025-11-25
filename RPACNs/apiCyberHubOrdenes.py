@@ -56,7 +56,10 @@ def update(datos, parametros):
     except JSONDecodeError: return response.body_not_json
 
 
-def ajusteCerrado(id, cnGenerado, fechaCaptura, fechaCompletado, status, cve_usuario, ip, cuenta, fechaSubida, categoria, mootivo, subMotivo, solucion, saldoIncobrable, promocion, ajuste, fechaGestion, tipo):
+def ajusteCerrado(id, cnGenerado, fechaCaptura, fechaCompletado, status, cve_usuario, ip, 
+                  proceso, cuenta, fechaSubida, categoria, mootivo, subMotivo, solucion, 
+                  saldoIncobrable, promocion, ajuste, fechaGestion, tipo, motivoDelCliente,
+                  comentarios, cnConMotivoHeavyUser):
     datos = {
         'id' : id,
         'cnGenerado' : cnGenerado,
@@ -65,6 +68,7 @@ def ajusteCerrado(id, cnGenerado, fechaCaptura, fechaCompletado, status, cve_usu
         'status' : status,
         'cve_usuario' : cve_usuario,
         'ip' : ip,
+        'proceso' : proceso,
         'cuenta' : cuenta,
         'fechaSubida' : fechaSubida,
         'categoria' : categoria,
@@ -75,7 +79,10 @@ def ajusteCerrado(id, cnGenerado, fechaCaptura, fechaCompletado, status, cve_usu
         'promocion' : promocion,
         'ajuste' : ajuste,
         'fechaGestion' : fechaGestion,
-        'tipo' : tipo
+        'tipo' : tipo,
+        'motivoDelCliente' : motivoDelCliente,
+        'comentarios' : comentarios,
+        'cnConMotivoHeavyUser' : cnConMotivoHeavyUser
     }
 
     parametros = { 'id' : id }
