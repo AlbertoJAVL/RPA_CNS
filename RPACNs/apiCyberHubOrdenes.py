@@ -72,7 +72,7 @@ def ajusteCerrado(id, cnGenerado, fechaCaptura, fechaCompletado, status, cve_usu
         'cuenta' : cuenta,
         'fechaSubida' : fechaSubida,
         'categoria' : categoria,
-        'mootivo' : mootivo,
+        'motivo' : mootivo,
         'subMotivo' : subMotivo,
         'solucion' : solucion,
         'saldoIncobrable' : saldoIncobrable,
