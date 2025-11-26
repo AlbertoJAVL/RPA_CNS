@@ -134,7 +134,7 @@ def main():
                     'motivo' : 'ECONOMICO',
                     'subMotivo' : 'NO PUEDE SEGUIR PAGANDO NR',
                     'solucion' : 'NO RETENIDO',
-                    'comentario' : f'DX POR HEAVY USER\nVIOLACION PUA INTERNET\nCN {info['cnConMotivoHeavyUser']}',
+                    'comentario' : f"DX POR HEAVY USER\nVIOLACION PUA INTERNET\nCN {info['cnConMotivoHeavyUser']}",
                     'motivoCliente' : 'FOLIO DE CANCELACION'
                 }
 
