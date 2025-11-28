@@ -65,36 +65,37 @@ def proceso_vivo() -> Optional[psutil.Process]:
 
 def reiniciar_bot() -> None:
     """Lanza el BAT de arranque tras avisar por Telegram."""
-    send_msg(f"⚠️  {IP_ADDR} – Reiniciando RPA con {os.path.basename(BAT_PATH)}")
+    # send_msg(f"⚠️  {IP_ADDR} – Reiniciando RPA con {os.path.basename(BAT_PATH)}")
     # logging.info('bots iniciadados')
-
+    print('...')
     host = socket.gethostname()
     ip = socket.gethostbyname(host)
     logging.info('Prueba')
 
 
-    if ip not in ['192.168.61.5', '192.168.61.4', '192.168.61.23', '192.168.61.42']:
-        subprocess.Popen(["cmd", "/c", BAT_PATH], creationflags=subprocess.CREATE_NO_WINDOW)
-        # time.sleep(2)
-        subprocess.Popen(["cmd", "/c", BAT_PATH], creationflags=subprocess.CREATE_NO_WINDOW)
-        # time.sleep(2)
-        subprocess.Popen(["cmd", "/c", BAT_PATH], creationflags=subprocess.CREATE_NO_WINDOW)
+    # if ip not in ['192.168.61.5', '192.168.61.4', '192.168.61.23', '192.168.61.42']:
+    #     subprocess.Popen(["cmd", "/c", BAT_PATH], creationflags=subprocess.CREATE_NO_WINDOW)
+    #     # time.sleep(2)
+    #     subprocess.Popen(["cmd", "/c", BAT_PATH], creationflags=subprocess.CREATE_NO_WINDOW)
+    #     # time.sleep(2)
+    #     subprocess.Popen(["cmd", "/c", BAT_PATH], creationflags=subprocess.CREATE_NO_WINDOW)
     
-    else: subprocess.Popen(["cmd", "/c", BAT_PATH], creationflags=subprocess.CREATE_NO_WINDOW)
-    # subprocess.Popen(["cmd", "/c", BAT_PATH], creationflags=subprocess.CREATE_NO_WINDOW)
+    # else: subprocess.Popen(["cmd", "/c", BAT_PATH], creationflags=subprocess.CREATE_NO_WINDOW)
+    subprocess.Popen(["cmd", "/c", BAT_PATH], creationflags=subprocess.CREATE_NO_WINDOW)
     # subprocess.Popen(["cmd", "/c", BAT_PATH], creationflags=subprocess.CREATE_NO_WINDOW)
 
 # ───────────────  BUCLE PRINCIPAL  ──────────────────────────────────────────
 def main() -> None:
     last_ram_alert = 0
-    send_msg(f"🤖 Watch-dog iniciado en {IP_ADDR} ({HOSTNAME})")
+    # send_msg(f"🤖 Watch-dog iniciado en {IP_ADDR} ({HOSTNAME})")
 
     while True:
         proc = proceso_vivo()
+        print(proc)
 
         # 1) Proceso caído  → alerta + arranque
         if proc is None:
-            send_msg(f"🚨  {IP_ADDR} – {PROCESS_EXE} NO encontrado ({now()})")
+            # send_msg(f"🚨  {IP_ADDR} – {PROCESS_EXE} NO encontrado ({now()})")
             reiniciar_bot()
             time.sleep(10)         # da tiempo a que arranque el BAT
             continue
@@ -102,7 +103,7 @@ def main() -> None:
         # 2) RAM del proceso excedida → terminar + reinicio
         ram_mb = proc.memory_info().rss / (1024 * 1024)
         if ram_mb > MEM_LIMIT_PROC_MB:
-            send_msg(f"🚨  RAM {PROCESS_EXE}: {ram_mb:.0f} MB > {MEM_LIMIT_PROC_MB} MB")
+            # send_msg(f"🚨  RAM {PROCESS_EXE}: {ram_mb:.0f} MB > {MEM_LIMIT_PROC_MB} MB")
             try:
                 proc.terminate(); proc.wait(15)
             except Exception as e:
@@ -114,7 +115,7 @@ def main() -> None:
         # 3) RAM del sistema elevada → alerta (máx. cada 10 min)
         mem_pct = psutil.virtual_memory().percent
         if mem_pct > MEM_LIMIT_SYSTEM_PCT and (time.time() - last_ram_alert) > 600:
-            send_msg(f"⚠️  RAM sistema {mem_pct:.0f}% > {MEM_LIMIT_SYSTEM_PCT}% ({now()})")
+            # send_msg(f"⚠️  RAM sistema {mem_pct:.0f}% > {MEM_LIMIT_SYSTEM_PCT}% ({now()})")
             last_ram_alert = time.time()
 
         time.sleep(CHECK_EVERY_SEC)
@@ -124,4 +125,5 @@ if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        send_msg("⏹️  Watch-dog detenido manualmente")
+        # send_msg("⏹️  Watch-dog detenido manualmente")
+        print('.')
