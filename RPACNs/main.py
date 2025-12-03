@@ -210,7 +210,7 @@ def main():
                     'subMotivo' : info['subMotivo'].strip(),
                     'solucion' : 'RX MIGRACIÓN DE PAQUETE',
                     'comentario' : f"{info['promocion']}\n{info['ajuste']}\n{info['fechaGestion']}\n{info['tipo']}",
-                    'motivoCliente' : info['motivoDelCliente'].strip()
+                    'motivoCliente' : info['motivoDelCliente'].strip().replace('+', 'CON')
                 }
 
                 if 'RECONEXION' in info['subMotivo']: plantilla['solucion'] = 'RX MIGRACION DE PAQUETE'
