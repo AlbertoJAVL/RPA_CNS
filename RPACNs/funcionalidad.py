@@ -172,6 +172,7 @@ def inicio(driver, cuenta, datos, proceso):
         
         solucion = driver.find_element(By.XPATH, "//input[@aria-label='Solución']")
         solucion.send_keys(datos['solucion'])
+        # sleep(100000)
         solucion.send_keys(Keys.RETURN)
 
         # PAGO CON PROMOCION

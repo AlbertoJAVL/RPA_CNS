@@ -207,11 +207,13 @@ def main():
                 plantilla = {
                     'categoria' : 'COBRANZA',
                     'motivo' : 'GESTORIA DE COBRANZA',
-                    'subMotivo' : info['subMotivo'],
-                    'solucion' : 'RX MIGRACION DE PAQUETE',
+                    'subMotivo' : info['subMotivo'].strip(),
+                    'solucion' : 'RX MIGRACIÓN DE PAQUETE',
                     'comentario' : f"{info['promocion']}\n{info['ajuste']}\n{info['fechaGestion']}\n{info['tipo']}",
-                    'motivoCliente' : info['motivoDelCliente']
+                    'motivoCliente' : info['motivoDelCliente'].strip()
                 }
+
+                if 'RECONEXION' in info['subMotivo']: plantilla['solucion'] = 'RX MIGRACION DE PAQUETE'
 
             else:
                 status = 'No aplica: Tipo CN NO Detectado'
@@ -242,8 +244,8 @@ def main():
                 return False
 
             
-
-            comentario = comentario.replace('/', ' ').replace('%', ' ').replace('.', ' ').replace('$', ' ').replace('_', ' ').replace('-', ' ').replace(',', ' ')
+            plantilla['comentario'] = plantilla['comentario'].replace('/', ' ').replace('%', ' ').replace('.', ' ').replace('$', ' ').replace('_', ' ').replace('-', ' ').replace(',', ' ')
+            # comentario = comentario.replace('/', ' ').replace('%', ' ').replace('.', ' ').replace('$', ' ').replace('_', ' ').replace('-', ' ').replace(',', ' ')
 
 
 

@@ -6,10 +6,10 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import apiCyberHubOrdenes as api
 
-p = 'prueba'
+# p = 'prueba'
 
-if 'COBRANZA EXTERNA' not in p and 'RECONEXION' not in p: print('hola')
-else: print('aqui')
+# if 'COBRANZA EXTERNA' not in p and 'RECONEXION' not in p: print('hola')
+# else: print('aqui')
 
 
 # fechaHoy = '12/12/2018'
@@ -35,6 +35,22 @@ else: print('aqui')
 # p = pruebas(driver, '70503926', '1208869478715', 'CVSUC9500410')
 # print(p)
 
+from os import system
+system("taskkill /f /im chrome.exe")
+system("taskkill /f /im chrome.exe")
+system("taskkill /f /im chrome.exe")
+system("taskkill /f /im chrome.exe")
+system("taskkill /f /im chrome.exe")
+system("taskkill /f /im chrome.exe")
+system("taskkill /f /im chrome.exe")
+system("taskkill /f /im chrome.exe")
+system("taskkill /f /im chrome.exe")
+system("taskkill /f /im chrome.exe")
+system("taskkill /f /im chrome.exe")
+system("taskkill /f /im chrome.exe")
+system("taskkill /f /im chrome.exe")
+system("taskkill /f /im chrome.exe")
+system("taskkill /f /im chrome.exe")
 
 
 
