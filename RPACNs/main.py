@@ -36,7 +36,7 @@ def main():
     # try: credenciales = api.get_orden_servicio2()
     # except: return False
         # driver, status_logueo = loginSiebel(credenciales['procesoUser'], credenciales['procesoPassword'])
-    driver, status_logueo = loginSiebel('bavila', 'Doctorgarcia@')
+    driver, status_logueo = loginSiebel('bavila', 'Doctores160@')
     if status_logueo == False: 
         print('→ LOGGIN INCORRECTO ←')
         return False
@@ -168,11 +168,11 @@ def main():
                     print(response)
                     return False
 
-                listadoMotivosCliente = ['IZZI 80 RET', 'IZZI 100 RET', 'IZZI 150 RET', 'IZZI 80 + IZZITV HD RET', 'IZZI 100 + IZZITV HD RET', 'IZZI 150 + IZZITV HD RET']
+                listadoMotivosCliente = ['IZZI 80 RET', 'IZZI 100 RET', 'IZZI 150 RET', 'IZZI 80 CON IZZITV HD RET', 'IZZI 100 CON IZZITV HD RET', 'IZZI 150 CON IZZITV HD RET']
                 
                 motivoClienteOK = False
                 for mC in listadoMotivosCliente:
-                    if mC in info['motivoDelCliente']:
+                    if mC in info['motivoDelCliente'].upper().strip().replace('+', 'CON'):
                         motivoClienteOK = True
                         break
 
